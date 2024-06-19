@@ -48,7 +48,7 @@
 </div>
 <script>
     let addToBasket = document.getElementById('add_to_basket') 
-    let csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].defaultValue  
+    let csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0]?.defaultValue  
     let quantityOptions = document.querySelector("#select")
     var quantity= quantityOptions.options[quantityOptions.selectedIndex].text; 
 
@@ -68,8 +68,7 @@
         .then(response => {
            return response.json()
         })
-        .then(data => {
-            console.log(data.quantity)
+        .then(data => { 
             document.getElementById("basket-qty").innerHTML = data.quantity
         })
         

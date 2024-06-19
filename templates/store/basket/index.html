@@ -20,13 +20,14 @@
           <div class="col border-bottom">
             <div class="row p-3">
               <div class="col-6">Hardback Book</div>
-              <div class="col-6 text-end"><span class="h6 fw-bold">£{{ product.price }}</span></div>
+              <div class="col-6 text-end"><span class="h6 fw-bold">£{{ item.product_total_price }}</span></div>
             </div>
           </div>
           <div class="col">
             <div class="row p-3">
               <div class="col-12">
-                <label for="select">Qty</label>
+                {% csrf_token %}
+                <label for="select">Quantity</label>
                 <select id="select{{product.id}}">
                   <option selected>
                     {{item.qty}}
@@ -101,5 +102,59 @@
     });
   })
 </script> {% endcomment %}
+<script>
+  let deleteButton = document.querySelectorAll('#delete-button') 
+  let updateButton = document.querySelectorAll('#update-button') 
+  let csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0]?.defaultValue  
+  
+  Array.from(deleteButton).map(button => {
+    button.addEventListener('click', (e) => {  
+      fetch("{% url "basket:delete_basket" %}", {method: "POST", body: JSON.stringify({product_id: button.dataset.index}), headers: {"X-CSRFToken": csrfmiddlewaretoken} })
+      .then(response => {
+         return response.json()
+      })
+      .then(data => {
+          const products = document.querySelectorAll(".product-item")
+          const product = Array.from(products).filter(product => product.dataset.index === button.dataset.index)
+          product[0].remove()
+      })
+      
+      e.preventDefault()
+  })
+  }) 
+  
 
+  
+  Array.from(updateButton).map(button => {
+    const body = {
+      product_id: button.dataset.index,
+      product_quantity: 1
+    }
+
+    const quantityOptions = document.querySelector("#select" + button.dataset.index)
+    const quantity= quantityOptions.options[quantityOptions.selectedIndex].text; 
+
+    quantityOptions.addEventListener('change', (e) => {
+      const select = e.target;
+      const value = select.value;
+      const selectedOption = select.selectedOptions[0].text;
+      body.product_quantity = selectedOption; 
+  })  
+  button.addEventListener('click', (e) => {  
+          if (body.product_quantity > 1) {
+          fetch("{% url "basket:update_basket" %}", {method: "POST", body: JSON.stringify(body), headers: {"X-CSRFToken": csrfmiddlewaretoken} })
+          .then(response => {
+             return response.json()
+          })
+          .then(data => { 
+              document.getElementById("basket-qty").innerHTML = data.basket_quantity
+              document.getElementById("subtotal").innerHTML = data.totalprice
+          })
+          
+          e.preventDefault()
+        }
+      })
+  })
+
+</script>
 {% endblock %}
