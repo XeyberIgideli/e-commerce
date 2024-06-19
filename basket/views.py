@@ -34,10 +34,8 @@ def update_basket (request):
     if request.method == 'POST':
         post_data = json.loads(request.body.decode("utf-8"))
         product_id = int(post_data['product_id'])
-        product_quantity = int(post_data['product_quantity'])  
+        selected_quantity = int(post_data['product_quantity'])  
 
-        basket.update(product_id, product_quantity)
-        basket_quantity = basket.__len__() 
-        totalprice = basket.get_total_price() 
-        product_total_price = product_quantity * product.price
-        return JsonResponse({"success": True, "basket_quantity": basket_quantity, "totalprice": totalprice})
+        basket.update(product_id, selected_quantity)
+        data = basket.display(product_id) 
+        return JsonResponse({**{"success": True}, **data})
