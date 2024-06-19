@@ -1,0 +1,80 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block title %}
+{{ product.title }}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <main class="pt-5">
+        <div class="row g-3">
+            <div class="col-md-5 col-lg-5 order-md-first bg-light">
+                <img class="img-fluid mx-auto d-block" width="200px" alt="Responsive image" src="{{ product.image.url }}">
+            </div>
+            <div class="col-md-7 col-lg-7 ps-md-3 ps-lg-5">
+                <h1 class="mb-0 h4">{{ product.title }}</h1>
+                <p><span class="lead">{{ product.author }}</span> (Author)</p>
+                <p>{{ product.description|slice:":355" }}...</p>
+                <div class="border">
+                    <div class="col border-bottom">
+                        <div class="row p-3">
+                            <div class="col-6">Hardback</div>
+                            <div class="col-6 text-end"><span class="h4 fw-bold">£{{ product.price }}</span></div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row p-3">
+                            <div class="col-6">
+                                <label for="select">Quantity:</label>
+                                <select id="select">
+                                    <option value="">1</option>
+                                    <option value="">2</option>
+                                    <option value="">3</option>
+                                    <option value="">4</option>
+                                </select>
+
+                            </div>
+                            <div class="col-6 text-end">
+                                {% csrf_token %}
+                                <button type="button" id="add_to_basket" value="{{product.id}}" class="btn btn-secondary btn-sm">Add to
+                                    basket</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div>
+<script>
+    let addToBasket = document.getElementById('add_to_basket') 
+    let csrfmiddlewaretoken = document.getElementsByName('csrfmiddlewaretoken')[0].defaultValue  
+    let quantityOptions = document.querySelector("#select")
+    var quantity= quantityOptions.options[quantityOptions.selectedIndex].text; 
+
+    let body = {
+        product_id: addToBasket.value,
+        product_quantity: quantity
+    }
+
+    quantityOptions.addEventListener('change', (e) => {
+        const select = e.target;
+        const value = select.value;
+        const selectedOption = select.selectedOptions[0].text;
+        body["product_quantity"] = selectedOption;
+    })
+    addToBasket.addEventListener('click', (e) => {  
+        fetch("{% url "basket:add_basket" %}", {method: "POST", body: JSON.stringify(body), headers: {"X-CSRFToken": csrfmiddlewaretoken} })
+        .then(response => {
+           return response.json()
+        })
+        .then(data => {
+            console.log(data.quantity)
+            document.getElementById("basket-qty").innerHTML = data.quantity
+        })
+        
+        e.preventDefault()
+    })
+
+</script>
+{% endblock %}
