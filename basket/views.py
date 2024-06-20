@@ -6,7 +6,7 @@ import json
 # Create your views here.
 
 def basket_index (request):
-    basket = Basket(request)
+    basket = Basket(request) 
     return render(request, 'store/basket/index.html', {"basket": basket})
 
 def add_basket (request):
@@ -27,7 +27,9 @@ def delete_basket (request):
         post_data = json.loads(request.body.decode("utf-8"))
         product_id = int(post_data['product_id'])
         basket.delete(product_id)
-        return JsonResponse({"success": True, "id": product_id})
+        basket_quantity = basket.display(product_id)['basket_quantity'] 
+        totalprice = basket.display(product_id)['totalprice']
+        return JsonResponse({"success": True, "basket_quantity": basket_quantity, "totalprice": totalprice})
     
 def update_basket (request):
     basket = Basket(request)
@@ -37,5 +39,5 @@ def update_basket (request):
         selected_quantity = int(post_data['product_quantity'])  
 
         basket.update(product_id, selected_quantity)
-        data = basket.display(product_id) 
+        data = basket.display(product_id)  
         return JsonResponse({**{"success": True}, **data})

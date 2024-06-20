@@ -53,7 +53,9 @@ class Basket:
         return sum(Decimal(item['price']) * item['quantity'] for item in self.basket.values())
         
     def display (self, product_id):
-        product_total_price = self.basket[str(product_id)]['quantity'] * Decimal(self.basket[str(product_id)]['price']) 
+        product_total_price = int
+        if str(product_id) in self.basket:
+            product_total_price = self.basket[str(product_id)]['quantity'] * Decimal(self.basket[str(product_id)]['price']) 
         return {"totalprice": self.get_total_price(), "basket_quantity": self.__len__(), "product_total_price": product_total_price}        
     def save (self):
         self.session.modified = True 
