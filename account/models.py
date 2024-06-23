@@ -38,6 +38,10 @@ class CustomAccountManager(BaseUserManager):
 
 
 class UserBase (AbstractBaseUser, PermissionsMixin):
+    class Meta:
+        verbose_name = "Account"
+        verbose_name_plural = "Accounts"
+        
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
@@ -63,9 +67,6 @@ class UserBase (AbstractBaseUser, PermissionsMixin):
     
     objects = CustomAccountManager()
     
-    class Meta:
-        verbose_name = "Account"
-        verbose_name_plural = "Accounts"
     
     def send_email (self, subject, message):
         return send_mail(
