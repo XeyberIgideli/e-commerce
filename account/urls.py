@@ -1,8 +1,11 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .forms import UserLoginForm
+from django.urls import reverse_lazy
+from .forms import UserLoginForm, PwdResetForm,PwdResetConfirmForm
 from . import views
+
 app_name = "account"
+
 
 urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
@@ -11,6 +14,22 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('activate/<slug:uidb64>/<slug:token>', views.account_activate, name='activate'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('profile/delete/', views.delete_user, name='delete_user'),
+    path('password-reset/', auth_views.PasswordResetView.as_view(
+                                                         template_name="account/password_reset/password-reset.html",
+                                                         success_url = "password-reset-email-confirm",
+                                                         email_template_name = "account/password_reset/password-reset-email.html",
+                                                         form_class = PwdResetForm), name='password-reset'),
     
+    path('password-reset-confirm/<slug:uidb64>/<slug:token>', auth_views.PasswordResetConfirmView.as_view(
+        template_name='account/password_reset/password-reset-confirm.html',
+        success_url='/account/password-reset/password-reset-complete/',
+        form_class=PwdResetConfirmForm),
+         name="password-reset-confirm"),
     
+    path('password-reset/password-reset-email-confirm/', auth_views.TemplateView.as_view(
+        template_name ='account/password_reset/reset-status.html'), name='reset-status-confirmed'),
+     
+    path('password-reset/password-reset-complete/', auth_views.TemplateView.as_view(
+        template_name ='account/password_reset/reset-status.html'), name='reset-status-complete')
 ]

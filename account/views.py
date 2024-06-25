@@ -9,6 +9,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
 from django.template.loader import render_to_string  
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 @login_required
@@ -28,9 +29,20 @@ def edit_profile (request):
              edit_form.save()
     edit_form = EditForm(instance = request.user)    
     return render(request,"account/dashboard/edit-profile.html", {'edit_form': edit_form}) 
-              
+
+@login_required 
+def delete_user (request): 
+    user = UserBase.objects.get(id = request.user.id)  
+    user.is_active = False
+    user.save()
+    logout(request)
+    return render(request,"account/dashboard/delete-info.html") 
+
+def password_reset (request):
+    pass
  
 def register (request):
+    referer = request.META.get('HTTP_REFERER') 
     if request.user.is_authenticated:
         return redirect('/')
     

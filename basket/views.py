@@ -7,7 +7,7 @@ import json
 
 def basket_index (request):
     basket = Basket(request) 
-    return render(request, 'store/basket/index.html', {"basket": basket})
+    return render(request, 'basket/index.html', {"basket": basket})
 
 def add_basket (request):
     basket = Basket(request)
