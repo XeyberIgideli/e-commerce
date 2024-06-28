@@ -70,6 +70,7 @@ class Basket:
     def save (self):
         self.session.modified = True 
         
-    def clear(self):
-        del self.session[settings.BASKET_SESSION_ID]
-        self.save()    
+    def clear(self, product_id):
+        self.delete(product_id)
+        # del self.session[settings.BASKET_SESSION_ID]
+        # self.save()    

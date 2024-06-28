@@ -1,8 +1,8 @@
 'use strict';
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-
 const elem = document.getElementById('submit');
 const clientsecret = elem.getAttribute('data-secret');
+document.cookie = "payment=success;path=/;";
 
 // Set up Stripe.js and Elements to use in checkout form
 const elements = stripe.elements();
@@ -113,6 +113,7 @@ const req = fetch('http://127.0.0.1:8000/orders/add/', {
                 console.log('payment error', result.error)
         } else {
             if (result.paymentIntent.status === 'succeeded') {
+                document.cookie = "payment=" + "success"
                 window.location.replace("http://127.0.0.1:8000/payment/order_succeeded/");
             } 
         }
