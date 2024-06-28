@@ -52,7 +52,7 @@
       <div class="col-md-4">
         <div class="sticky-top bg-light p-3 rounded">
           <div class="d-grid gap-2 mb-3">
-            <a role="button" href="" class="btn btn-success fw-bold">Checkout</a>
+            <a role="button" href="{% url "payment:payment_index" %}" class="btn btn-success fw-bold">Checkout</a>
             <button class="btn btn-dark">Save for later</button>
           </div>
           <div class="h6 fw-bold">Sub Total: £<span id="subtotal">{{ basket.get_total_price }}</span></div>

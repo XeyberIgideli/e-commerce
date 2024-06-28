@@ -2,8 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.text import slugify
-
+from django.utils.text import slugify 
 # Create your models here.
 
 class ProductManager(models.Manager):
@@ -51,10 +50,14 @@ class Product (models.Model):
         return reverse("store:product_detail", args=[self.slug])
     
     def save(self, *args, **kwargs): 
+        # if not self.is_active:
+        #    basket = self.session.get(settings.BASKET_SESSION_ID)
+        #    print(basket)     
         if self.slug:
             self.slug = slugify(kwargs.pop('slug', self.slug))
         else:
             self.slug = slugify(self.title)
+            
         return super(Product, self).save(*args, **kwargs)
         
     def __str__(self):

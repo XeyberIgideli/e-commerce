@@ -14,7 +14,7 @@
     <hr />
   </div>
   <div class="container">
-    {% comment %} {% for order in orders %}
+     {% for order in orders %}
     <div class="row g-3">
       <div class="col-12 bg-light p-3 d-flex justify-content-between">
         <div class="d-flex d-flex-inline">
@@ -44,7 +44,9 @@
           <button class="btn btn-light" type="button">Leave a review</button>
         </div>
       </div>
+      <p style="background-color:red;">{{order.order_items}}</p>
       <div class="col-md-7 col-lg-8 p-0">
+        {% comment %} "items" in "order.items.all" coming from related_names in OrderItem model {% endcomment %}
         {% for item in order.items.all %}
         <div class="card mb-3 border-0">
           <div class="row g-0">
@@ -63,6 +65,6 @@
         {% endfor %}
       </div>
     </div>
-    {% endfor %} {% endcomment %}
+    {% endfor %} 
   </div>
 {% endblock %}

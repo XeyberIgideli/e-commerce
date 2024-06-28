@@ -10,11 +10,13 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
 from django.template.loader import render_to_string  
 from django.views.decorators.csrf import csrf_exempt
+from orders.models import Order
 # Create your views here.
 
 @login_required
 def dashboard (request):
-    return render(request, 'account/dashboard/index.html')
+    orders = Order.objects.filter(user=request.user.id).filter(billing_status = True)
+    return render(request, 'account/dashboard/index.html', {"orders": orders})
 
 @login_required
 def logout_view (request):

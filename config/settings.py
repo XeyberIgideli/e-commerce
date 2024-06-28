@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY') 
+SECRET_KEY = os.getenv('SECRET_KEY')  
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', default=False)
 
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'store',
     'basket',
-    'account'
+    'account',
+    'payment',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -131,6 +133,10 @@ MEDIA_URL = "/images/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Basket session id
+BASKET_SESSION_ID = 'basket'
+
 
 # Custom user model
 AUTH_USER_MODEL = 'account.UserBase'
