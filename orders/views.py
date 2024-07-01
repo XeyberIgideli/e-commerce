@@ -2,7 +2,7 @@ from django.shortcuts import render
 from basket.basket import Basket
 from .models import Order,OrderItem
 import json
-from django.http.response import HttpResponse
+from django.http.response import JsonResponse
 # Create your views here.
 
 def add_order (request):
@@ -23,5 +23,7 @@ def add_order (request):
             
             for item in basket:
                 OrderItem.objects.create(order_id=order_id, product=item['product'], price=item['price'], quantity=item['quantity'])
-    
-        return HttpResponse({"success": "Added"})
+        data = {
+            "product_id": 1
+        }
+        return JsonResponse(data)

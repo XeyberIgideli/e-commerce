@@ -2,7 +2,6 @@
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
 const elem = document.getElementById('submit');
 const clientsecret = elem.getAttribute('data-secret');
-document.cookie = "payment=success;path=/;";
 
 // Set up Stripe.js and Elements to use in checkout form
 const elements = stripe.elements();
@@ -38,49 +37,7 @@ var custName = document.getElementById("custName").value;
 var custAdd = document.getElementById("custAdd").value;
 var custAdd2 = document.getElementById("custAdd2").value;
 var postCode = document.getElementById("postCode").value;
-
-
-//   $.ajax({
-//     type: "POST",
-//     url: 'http://127.0.0.1:8000/orders/add/',
-//     data: {
-//       order_key: clientsecret,
-//       csrfmiddlewaretoken: CSRF_TOKEN,
-//       action: "post",
-//     },
-//     success: function (json) {
-//       console.log(json.success)
-
-//       stripe.confirmCardPayment(clientsecret, {
-//         payment_method: {
-//           card: card,
-//           billing_details: {
-//             address:{
-//                 line1:custAdd,
-//                 line2:custAdd2
-//             },
-//             name: custName
-//           },
-//         }
-//       }).then(function(result) {
-//         if (result.error) {
-//           console.log('payment error')
-//           console.log(result.error.message);
-//         } else {
-//           if (result.paymentIntent.status === 'succeeded') {
-//             console.log('payment processed')
-//             // There's a risk of the customer closing the window before callback
-//             // execution. Set up a webhook or plugin to listen for the
-//             // payment_intent.succeeded event that handles any business critical
-//             // post-payment actions.
-//             window.location.replace("http://127.0.0.1:8000/payment/orderplaced/");
-//           }
-//         }
-//       });
-
-//     },
-//     error: function (xhr, errmsg, err) {},
-//   });
+ 
 
 const req = fetch('http://127.0.0.1:8000/orders/add/', {
     method: 'POST',
@@ -95,6 +52,7 @@ const req = fetch('http://127.0.0.1:8000/orders/add/', {
     }),
   })
   const response = await req 
+  const body = await response.json() 
   if (response.ok) {
     // Handle success 
     stripe.confirmCardPayment(clientsecret, {
@@ -113,8 +71,8 @@ const req = fetch('http://127.0.0.1:8000/orders/add/', {
                 console.log('payment error', result.error)
         } else {
             if (result.paymentIntent.status === 'succeeded') {
-                document.cookie = "payment=" + "success"
-                window.location.replace("http://127.0.0.1:8000/payment/order_succeeded/");
+                document.cookie = "payment=success;path=/;";
+                window.location.replace(`http://127.0.0.1:8000/payment/${body.product_id}/order_succeeded/`);
             } 
         }
     })
@@ -123,26 +81,6 @@ const req = fetch('http://127.0.0.1:8000/orders/add/', {
     console.log('error')
   }
 
-
-// stripe.confirmCardPayment(clientsecret, {
-//     payment_method: {
-//       card: card,
-//       billing_details: {
-//         address:{
-//             line1:custAdd,
-//             line2:custAdd2
-//         },
-//         name: custName
-//       },
-//     }
-//   }).then(function(result) {
-//     if (result.error) {
-//       console.log('payment error')
-//     } else {
-//       if (result.paymentIntent.status === 'succeeded') {
-//         console.log('payment processed')
-//       } 
-//     }
-//   })
+ 
 });
 

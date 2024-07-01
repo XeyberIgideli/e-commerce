@@ -6,17 +6,20 @@ class Basket:
     def __init__ (self, request):
         self.session = request.session
         self.copy_basket = {}
-        basket = self.session.get(settings.BASKET_SESSION_ID)
-        product_ids = basket.keys()
-        products = Product.objects.filter(id__in = product_ids) 
+        basket = self.session.get(settings.BASKET_SESSION_ID) 
     
         if settings.BASKET_SESSION_ID not in self.session:
             basket = self.session[settings.BASKET_SESSION_ID] = {}
+            
         self.basket = basket 
         
-        for product in products:
-            if not product.is_active:
-                self.delete(product.id)
+        if basket is not None:
+            product_ids = basket.keys()
+            products = Product.objects.filter(id__in = product_ids) 
+        
+            for product in products:
+                if not product.is_active:
+                    self.delete(product.id)
         
         
     def add (self, product, product_quantity):
@@ -41,9 +44,7 @@ class Basket:
         product_ids = self.basket.keys()
         products = Product.objects.filter(id__in = product_ids) 
         basket = self.basket.copy() 
-        for product in products: 
-            # if not product.is_active:
-            #     self.delete(product.id)
+        for product in products:  
             basket[str(product.id)]['product'] = product  
             
         for item in basket.values():
@@ -72,5 +73,4 @@ class Basket:
         
     def clear(self, product_id):
         self.delete(product_id)
-        # del self.session[settings.BASKET_SESSION_ID]
-        # self.save()    
+        self.save()    
