@@ -27,14 +27,14 @@ class Basket:
         if product_id in self.basket:    
             self.basket[product_id]["quantity"] += product_quantity
         else:    
-            self.basket[product_id] = {"price": str(product.price), "quantity": int(product_quantity)} 
+            self.basket[product_id] = {"price": str(product.regular_price), "quantity": int(product_quantity)} 
             
         self.save()
     
     def update (self, product_id, quantity):
         product_id = str(product_id)
         if product_id in self.basket:
-            self.basket[product_id]["quantity"] += int(quantity)
+            self.basket[product_id]["quantity"] = int(quantity)
         self.save()
         
     def __len__ (self): 

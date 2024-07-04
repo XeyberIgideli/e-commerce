@@ -35,8 +35,8 @@ def update_basket (request):
     basket = Basket(request)
     if request.method == 'POST':
         post_data = json.loads(request.body.decode("utf-8"))
-        product_id = int(post_data['product_id'])
-        selected_quantity = int(post_data['product_quantity'])  
+        product_id = int(post_data['product_id']) 
+        selected_quantity = int(post_data['selected_quantity'])  
 
         basket.update(product_id, selected_quantity)
         data = basket.display(product_id)  

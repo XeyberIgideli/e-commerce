@@ -15,7 +15,11 @@
         {% for item in basket %}
         <div class="row mb-4 border product-item" data-index="{{item.product.id}}">
           <div class="col-md-3 col-lg-2 bg-light">
-            <img class="img-fluid mx-auto d-block" width="120px" alt="Responsive image" src="{{ item.product.image.url }}">
+            {% for image in item.product.product_image.all %}
+            {% if image.is_feature %} 
+              <img class="img-fluid mx-auto d-block h-100 w-100" width="120px" alt="{{ image.alt_text }}" src="{{ image.image.url }}">
+            {% endif %}
+          {% endfor %}
           </div>
           <div class="col-md-9 col-lg-10">
             <a href="{{ item.product.get_absolute_url }}" class="text-decoration-none text-reset">
@@ -30,11 +34,8 @@
                 <div class="col-12">
                   {% csrf_token %}
                   <label for="select{{ item.product.id }}">Quantity</label>
-                  <select id="select{{ item.product.id }}"> 
-                      <option selected>
-                        {{item.quantity}}
-                      </option>
-                      <option value="">1</option>
+                  <select id="select{{ item.product.id }}">  
+                      <option value="" selected>1</option>
                       <option value="">2</option>
                       <option value="">3</option>
                       <option value="">4</option>
@@ -106,10 +107,9 @@
       const select = e.target;
       const value = select.value;
       const selectedOption = select.selectedOptions[0].text;
-      body.product_quantity = selectedOption; 
+      body.selected_quantity = selectedOption; 
   })  
   button.addEventListener('click', (e) => {   
-          if (body.product_quantity > 1) {
           fetch("{% url "basket:update_basket" %}", {method: "POST", body: JSON.stringify(body), headers: {"X-CSRFToken": csrfmiddlewaretoken} })
           .then(response => {
              return response.json()
@@ -121,7 +121,6 @@
           })
           
           e.preventDefault()
-        }
       })
   })
 
