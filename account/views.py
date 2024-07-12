@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
-from account.models import UserBase
+from account.models import Customer
 from .forms import RegistrationForm,EditForm
 from .token import account_activation_token
 from django.contrib.sites.shortcuts import get_current_site  
@@ -34,7 +34,7 @@ def edit_profile (request):
 
 @login_required 
 def delete_user (request): 
-    user = UserBase.objects.get(id = request.user.id)  
+    user = Customer.objects.get(id = request.user.id)  
     user.is_active = False
     user.save()
     logout(request)
@@ -79,7 +79,7 @@ def register (request):
     
 def account_activate(request, uidb64, token):
         uid = force_str(urlsafe_base64_decode(uidb64))  
-        user = UserBase.objects.get(pk=uid)  
+        user = Customer.objects.get(pk=uid)  
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = True
             user.save()

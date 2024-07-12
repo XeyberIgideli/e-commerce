@@ -7,12 +7,13 @@
   <h3 class="mb-4">Sign In</h3>
   {% if form.errors %}
   <div class="alert alert-primary" role="alert">
-    Error: Username or Password not correct!
+    {{form.errors}}
+    Error: Email or Password is not correct!
   </div>
   {% endif %}
-  <label class="form-label">{{ form.username.label}}</label>
+  <label class="form-label">{{ form.username.label}}:</label>
   {{ form.username}}
-  <label class="form-label">{{ form.password.label}}</label>
+  <label class="form-label">{{ form.password.label}}:</label>
   {{ form.password}}
   <div class="d-grid gap-2">
     <input type="hidden" name="next" value="{{ next }}">

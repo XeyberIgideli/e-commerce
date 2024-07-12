@@ -30,8 +30,11 @@ class Category (MPTTModel):
         return reverse("store:category_detail", args=[self.slug])  
         
     def __str__(self):
-        return self.name    
-    
+        return self.name  
+      
+    def save(self, *args, **kwargs):  
+        self.slug = slugify(self.name)
+        return super(Category, self).save(*args, **kwargs)
 
 class ProductType (models.Model):
     name = models.CharField(verbose_name=_("Product type name"), help_text= _("Required"),max_length=255, unique = True)
@@ -109,7 +112,7 @@ class ProductImage (models.Model):
                print(p.alt_text)
            ProductImage.objects.filter(product = self.product, is_feature = True).update(is_feature = False)
            
-           super().save(*args,*kwargs)
+        super().save(*args,*kwargs)
 
     
     class Meta:
