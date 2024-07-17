@@ -92,3 +92,12 @@ class Address (models.Model):
         
     def __str__(self) -> str:
         return self.id    
+    
+
+# class WishList (models.Model):
+#     class Meta:
+#         verbose_name = "Wishlist"
+#         verbose_name_plural = "Wishlists"
+        
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)        
+#     customer = models.ForeignKey(Customer, verbose_name= "Customer", on_delete=models.CASCADE)   

@@ -1,7 +1,39 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 
-from account.models import Customer
+from account.models import Customer,Address
+
+class UserAddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ["fullname", "phone_number", "address_line_1", "address_line_2","town_city",  "postcode"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["fullname"].required = True
+        self.fields["phone_number"].required = True
+        self.fields["address_line_1"].required = True
+        self.fields["address_line_2"].required = True
+        self.fields["town_city"].required = True
+        self.fields["postcode"].required = True
+        
+        
+        self.fields["fullname"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
+        )
+        self.fields["phone_number"].widget.attrs.update({"class": "form-control mb-2 account-form", "placeholder": "Phone"})
+        self.fields["address_line_1"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Address line 1"}
+        )
+        self.fields["address_line_2"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Address line 2"}
+        )
+        self.fields["town_city"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Town city"}
+        )
+        self.fields["postcode"].widget.attrs.update(
+            {"class": "form-control mb-2 account-form", "placeholder": "Postcode"}
+        )
 
 
 class UserLoginForm (AuthenticationForm):

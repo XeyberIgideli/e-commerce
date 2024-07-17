@@ -31,5 +31,14 @@ urlpatterns = [
         template_name ='account/password_reset/reset-status.html'), name='reset-status-confirmed'),
      
     path('password-reset/password-reset-complete/', auth_views.TemplateView.as_view(
-        template_name ='account/password_reset/reset-status.html'), name='reset-status-complete')
+        template_name ='account/password_reset/reset-status.html'), name='reset-status-complete'),
+    
+    path('addresses/', views.view_addresses, name="addresses"),
+    path('add_address/', views.add_address, name="add_address"),
+    path('addresses/edit/<slug:id>/', views.edit_address, name="edit_address"),
+    path('addresses/delete/<slug:id>/', views.delete_address, name="delete_address"),
+    path('addresses/set_default/<slug:id>/', views.set_default, name="set_default"),
+    path('wishlist/add/<int:id>/', views.add_to_wishlist, name="add_to_wishlist"),
+    path('wishlist/', views.view_wishlist, name="view_wishlist")
+    
 ]

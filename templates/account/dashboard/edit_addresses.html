@@ -1,0 +1,48 @@
+{% extends "../sub_base.html" %}
+{% block title %}Edit Addresses{% endblock %}
+
+{% block sub_content %}
+<div class="col-6 mx-auto">
+  <h1 class="h3">Create/Edit Address</h1>
+  <div>Add a new delivery <b>address</b> and delivery preferences</div>
+  <hr />
+  <form name="address_form" class="account-form" method="post" enctype="multipart/form-data"> 
+    {% csrf_token %} 
+
+    {% for field in form %}
+    <div class="form-group">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.errors %}
+          <div class="error">
+              {% for error in field.errors %}
+                  <p>{{ error }}</p>
+              {% endfor %}
+          </div>
+      {% endif %}
+  </div>
+    
+    {% endfor %}   
+    {% if method == "patch" %}
+      <button class="btn btn-primary btn-block py-2 mb-4 mt-4 fw-bold w-100" type="button" value="Submit" onclick="submitForm()">
+        Edit Address
+      </button> 
+      {% else %}
+      <button class="btn btn-primary btn-block py-2 mb-4 mt-4 fw-bold w-100" type="button" value="Submit" onclick="submitForm()">
+        Add Address
+        </button>
+    {% endif %}
+      
+  </form>
+
+</div>
+
+<script> 
+function submitForm() {
+   var form = document.getElementsByName('address_form')[0];
+   form.submit(); // Submit the form
+   form.reset();  // Reset all form data
+   return false; // Prevent page refresh
+}
+</script>
+{% endblock %}

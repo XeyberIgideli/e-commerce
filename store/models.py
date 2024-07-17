@@ -67,9 +67,10 @@ class Product (models.Model):
     regular_price = models.DecimalField(verbose_name=_("Regular price"), help_text=_("Maximum 999.9"), max_digits=5, decimal_places=2)
     discount_price = models.DecimalField(verbose_name=_("Discount price"), help_text=_("Maximum 999.9"), max_digits=5, decimal_places=2)
     is_active = models.BooleanField(verbose_name=_("Product visibility"), help_text= _("Change product visibility"), default=True)
+    users_wishlist = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name= "users_wishlist", blank = True) 
     created_at = models.DateTimeField(auto_now_add=True, editable= False)
     updated_at = models.DateTimeField(auto_now=True)
-    
+         
     class Meta:
         ordering = ("-created_at",)
         verbose_name = _("Product")
@@ -87,7 +88,6 @@ class ProductSpecificationValue (models.Model):
     product = models.ForeignKey(Product, on_delete=models.RESTRICT)
     specification = models.ForeignKey(ProductSpecification, on_delete=models.RESTRICT)
     value = models.CharField(verbose_name=_("Value"), help_text=_("Product specification value (max of 255 words)"), max_length=255)
-    
     
     class Meta:
         verbose_name = _("Product Specification Value")
