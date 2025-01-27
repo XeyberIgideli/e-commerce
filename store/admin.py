@@ -6,7 +6,7 @@ from mptt.admin import MPTTModelAdmin
 
 admin.site.register(Category, MPTTModelAdmin)
 class AdminCategory (admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
+    prepopulated_fields = {'slug': ('name',)} # it will prepopulate the slug field based on the name field
     
 class ProductSpecificationInline (admin.TabularInline):
     model = ProductSpecification

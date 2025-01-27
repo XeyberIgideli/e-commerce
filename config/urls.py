@@ -9,9 +9,9 @@ urlpatterns = [
     path('', include('store.urls', namespace='store')),
     path('basket/', include('basket.urls', namespace='basket')),
     path('account/', include('account.urls', namespace='account')),
-    path('payment/', include('payment.urls', namespace='payment')),
+    path('checkout/', include('checkout.urls', namespace='checkout')), 
     path('orders/', include('orders.urls', namespace='orders')),
-    path('debug/', include(debug_toolbar.urls))
+    path('debug/', include(debug_toolbar.urls)) 
 ]
 
 if settings.DEBUG:
